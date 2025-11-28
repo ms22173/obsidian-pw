@@ -187,16 +187,15 @@ export function TodoItemComponent({todo, deps, playSound, dontCrossCompleted, di
 
   const renderUrl = (todoText: string):(string|React.ReactElement)[] => {
     const res: (string|React.ReactElement)[] = [];
-    const sizeLimit = 24;
     do {
-      const match = /(.+)(((https?:\/\/)([^\s]+))(.*))/.exec(todoText);
+      const match = /(.*)(\[([^\]]+)\]\((https?:\/\/[^\)]+)\))(.*)/.exec(todoText);
       if (!match) {
         res.splice(0, 0, todoText);
         break;
       }
-      const [_, before, urlAndRest, url, protocol, link, rest] = match;
+      const [_, before, fullMatch, linkText, url, rest] = match;
       res.splice(0, 0, rest);
-      res.splice(0, 0, <a onClick={ev => ev.defaultPrevented = true} href={url} target="_blank" key={url}>🔗 {link.length > sizeLimit ? link.substring(0, sizeLimit - 3) + "...": link}</a>);
+      res.splice(0, 0, <a onClick={ev => ev.defaultPrevented = true} href={url} target="_blank" key={url}>{linkText} 🔗</a>);
       todoText = before;
     } while (todoText && todoText.length > 0);
     return res;
