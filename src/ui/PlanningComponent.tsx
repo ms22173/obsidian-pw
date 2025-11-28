@@ -116,12 +116,21 @@ export function PlanningComponent({deps, settings, app}: PlanningComponentProps)
     return todosInRange
   }
 
-  function getTodosWithNoDate<T>(): TodoItem<TFile>[] {
+  function getTodosWithNoDate(): TodoItem<TFile>[] {
     return filteredTodos.filter(todo =>
       !findTodoDate(todo, settings.dueDateAttribute)
       && todo.attributes
       && !todo.attributes[settings.selectedAttribute]
       && todo.status !== TodoStatus.Canceled && todo.status !== TodoStatus.Complete)
+  }
+
+  function getEntertainmentTodos(): TodoItem<TFile>[] {
+    return filteredTodos.filter(todo =>
+      todo.attributes &&
+      todo.attributes['container'] === 'entertainment' &&
+      todo.status !== TodoStatus.Canceled &&
+      todo.status !== TodoStatus.Complete
+    );
   }
 
   function findTodo(todoId: string): TodoItem<TFile> | undefined {
@@ -147,6 +156,16 @@ export function PlanningComponent({deps, settings, app}: PlanningComponentProps)
         return;
       }
 			fileOperations.removeAttributeAsync(todo, settings.dueDateAttribute).then()
+    }
+  }
+
+  function removeContainer() {
+    return (todoId: string) => {
+      const todo = findTodo(todoId);
+      if (!todo) {
+        return;
+      }
+      fileOperations.removeAttributeAsync(todo, 'container').then()
     }
   }
 
@@ -282,6 +301,13 @@ export function PlanningComponent({deps, settings, app}: PlanningComponentProps)
       getTodosWithNoDate(),
       false,
       removeDate());
+
+    yield todoColumn(
+      "🍿",
+      "Entertainment",
+      getEntertainmentTodos(),
+      hideEmpty,
+      removeContainer());
 
     const today = DateTime.now().startOf("day")
 		yield todoColumn(
