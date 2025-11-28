@@ -328,7 +328,7 @@ export function PlanningComponent({deps, settings, app}: PlanningComponentProps)
       if (!settings.showWeekEnds && localDay >= 6) {
         continue
       }
-      const label = i === 0 ? "Tomorrow" : bracketStart.toFormat("cccc dd/MM")
+      const label = i === 0 ? "Tomorrow" : bracketStart.toFormat("cccc MM/dd")
       const todos = getTodosByDate(bracketStart, bracketEnd);
       const style = getWipStyle(todos);
       yield todoColumn(
@@ -344,7 +344,7 @@ export function PlanningComponent({deps, settings, app}: PlanningComponentProps)
     for (let i = 1; i < 5; i++) {
       bracketStart = bracketEnd
       bracketEnd = bracketStart.plus({ weeks: 1 })
-      const label = `Week +${i} (${bracketStart.toFormat("dd/MM")} - ${bracketEnd.minus({ days: 1 }).toFormat("dd/MM")})`;
+      const label = `Week +${i} (${bracketStart.toFormat("MM/dd")} - ${bracketEnd.minus({ days: 1 }).toFormat("MM/dd")})`;
       const todos = getTodosByDate(bracketStart, bracketEnd)
       const style = getWipStyle(todos);
       yield todoColumn(
@@ -360,7 +360,7 @@ export function PlanningComponent({deps, settings, app}: PlanningComponentProps)
     for (let i = 1; i < 4; i++) {
       bracketStart = bracketEnd
       bracketEnd = bracketStart.plus({ months: 1 })
-      const label = `Month +${i} (${bracketStart.toFormat("dd/MM")} - ${bracketEnd.minus({ days: 1 }).toFormat("dd/MM")})`
+      const label = `Month +${i} (${bracketStart.toFormat("MM/dd")} - ${bracketEnd.minus({ days: 1 }).toFormat("MM/dd")})`
       const todos = getTodosByDate(bracketStart, bracketEnd);
       const style = getWipStyle(todos);
       yield todoColumn(
