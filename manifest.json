@@ -1,6 +1,6 @@
 {
-	"id": "proletarian-wizard",
-	"name": "Proletarian Wizard Task Manager",
+	"id": "proletarian-wizard-local",
+	"name": "Proletarian Wizard Task Manager (LOCAL)",
 	"author": "Charles Feval",
 	"description": "Track your tasks across all the notes in your workspace. Organize your day. Plan your work",
 	"authorUrl": "https://fev.al",
