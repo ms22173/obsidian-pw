@@ -38,16 +38,32 @@ function sortTodos(todos: TodoItem<TFile>[]): TodoItem<TFile>[] {
   if (!todos) {
     return []
   }
-  return todos.sort((a, b) => {
+  return [...todos].sort((a, b) => {
+    // 1. Sort by Status first
     const statusDiff = getStatusValue(b) - getStatusValue(a);
     if (statusDiff) {
       return statusDiff
     }
+
+    // 2. Then sort by Priority
     const priorityDiff = getPriorityValue(b) - getPriorityValue(a);
-    if (!priorityDiff) {
-      return a.text.toLocaleLowerCase().localeCompare(b.text.toLocaleLowerCase())
+    if (priorityDiff) {
+      return priorityDiff
     }
-    return priorityDiff
+
+    // 3. Finally sort by file appearance order (file path + line number)
+    // 3a. Compare file paths (with safety checks)
+    const filePathA = a.file?.path || '';
+    const filePathB = b.file?.path || '';
+    const fileCompare = filePathA.localeCompare(filePathB);
+    if (fileCompare !== 0) {
+      return fileCompare;
+    }
+
+    // 3b. Within same file, sort by line number
+    const lineA = a.line ?? Number.MAX_SAFE_INTEGER;  // Items without line numbers go last
+    const lineB = b.line ?? Number.MAX_SAFE_INTEGER;
+    return lineA - lineB;
   })
 }
 
